@@ -56,4 +56,25 @@
 
 ### Deployment and replica set
 ---
-- To create a replica of a Pod, you don't need to create a Pod, rather you need to define the blueprints for the application Pod and specify the number of replicas you needed. Defining the blueprint of the application Pod is called deployment.
+- To create a replica of a Pod, you don't need to create a Pod, rather you need to define the blueprints for the application Pod and specify the number of replicas you needed. Defining the blueprint of the application Pod is called deployment. Deployment is an abstraction of pod.
+
+- In case of application, if any application pod dies, based on the deployment script, another application pod will be created. But in case of database, replicating database is not possible due to database state (may lead to inconsistant database state). To handle the issue, another k8s component `StatefulSet` comes into play. Stateful applications, such as MySql, Mongo, Elastic search pods should be created by StatefulSet but not by Deployment. Deploying StatefulSet is not simple and easy :disappointed:. One option could be to host database outside k8s cluster.
+
+![K8s Components](https://github.com/chowdhury18/getting-started-with-kubernetes/blob/master/Diagrams/k8s-components.png)
+
+
+## K8s Architecture
+Explained with example.
+
+Our example has one node (worker node) and it has 4 pods (2 my-app pods and 2 db pods). Worker node does the actual work.
+
+- Every node (worker node) must have 3 processes installed:
+    - Container runtime (e.g., docker)
+    - Kubelet - interact between the container and the worker node (physical machine). Kubelet starts the pod with a container inside.
+    - Kube proxy - forwards the request. In multiple worker nodes setup, nodes communicate with the help of services. Kube proxy helps to forward the request to pods intelligently.
+
+![k8s Architecture](https://github.com/chowdhury18/getting-started-with-kubernetes/blob/master/Diagrams/k8s-architecture.png)
+
+
+## References
+- [Kubernetes Tutorial for Beginners - TechWorld with Nana](https://www.youtube.com/watch?v=X48VuDVv0do&t=1087s)
