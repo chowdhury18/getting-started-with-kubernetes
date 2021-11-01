@@ -64,14 +64,25 @@
 
 
 ## K8s Architecture
-Explained with example.
-
-Our example has one node (worker node) and it has 4 pods (2 my-app pods and 2 db pods). Worker node does the actual work.
-
-- Every node (worker node) must have 3 processes installed:
+- Every node (`worker node`) must have 3 processes installed:
     - Container runtime (e.g., docker)
     - Kubelet - interact between the container and the worker node (physical machine). Kubelet starts the pod with a container inside.
     - Kube proxy - forwards the request. In multiple worker nodes setup, nodes communicate with the help of services. Kube proxy helps to forward the request to pods intelligently.
+
+- `Kubernetes Cluster`: A Kubernetes cluster is a set of nodes that run containerized applications.
+
+- How to manage and interact with the cluster?
+    - How to schedule the pods
+    - How to monitor the pods
+    - How to re-schedule/re-start the pods
+    - How to add a new node to the cluster
+
+- `Master Node` manages all the interaction between the pods and the cluster. 
+- Four processes run on every master node:
+    - ***Api Server***: Works as cluster gateway. If any clients (UI, kubernetes dashboard, command line) wants to deploy an application to the cluster, it goes through Api Server of the master node. `Some request` -> `Api Server` -> `Validate Request` -> `Other Processes..` -> `Pod`
+    - ***Scheduler***: `Schedule new pod request` -> `Api Server` -> `Scheduler` -> `Kubelet` -> `create new pod`. Scheduler decides on which node new pod should be scheduled.
+    - ***Controller Manager***: Detect cluster state changes. If I pod dies, controller manager will detect and try to recover the situation. `Controller Manager` -> `Scheduler` -> `Kubelet` -> `create new pod`
+    - ***etcd***: Key-Value store of cluster state. Cluster changes get stored in the key value store.
 
 ![k8s Architecture](https://github.com/chowdhury18/getting-started-with-kubernetes/blob/master/Diagrams/k8s-architecture.png)
 
