@@ -86,6 +86,102 @@
 
 ![k8s Architecture](https://github.com/chowdhury18/getting-started-with-kubernetes/blob/master/Diagrams/k8s-architecture.png)
 
+## Minikube
+- Minikube is one node cluster where `Master` and `Worker` nodes run on one Machine.
+- Minikube will create avirtual box in your system and nodes run in that box.
+
+### Commands:
+```shell
+# Starts kubernetes one node cluster (vm). 
+# --vm-driver is specifing which hypervisor to use.
+minikube start --vm-driver=hyperkit
+```
+
+## Kubectl
+- Command line tool for kubernetes cluster
+- To interact such as, deploy new pod, service with minikube virtual box
+
+### Commands:
+```sh
+# get status of nodes
+kubectl get nodes
+
+# get pod status
+kubectl get pod
+
+# get services status
+kubectl get services
+
+# create deployment
+# deployment plays abstraction role for pods
+# 'nginx-deploy' is the name of the deployment
+kubectl create deployment nginx-deploy --image=nginx
+
+# get deployment status
+kubectl get deployment
+
+# get replicaset
+kubectl get replicaset
+
+# edit deployment
+# 'nginx-deploy' is the name of the deployment
+kubectl edit deployment nginx-deploy
+
+# log pod
+# 'nginx-deploy-12fr34tg24-1e3f5' name of the pod
+kubectl logs nginx-deploy-12fr34tg24-1e3f5
+
+# additional information regarding pod
+# 'nginx-deploy-12fr34tg24-1e3f5' name of the pod
+kubectl describe pod nginx-deploy-12fr34tg24-1e3f5
+
+# interact with pod
+# 'nginx-deploy-12fr34tg24-1e3f5' name of the pod
+kubectlexec -it nginx-deploy-12fr34tg24-1e3f5 -- bin/bash
+
+# delete deployment
+# 'nginx-deploy' is the name of the deployment
+kubectl delete deployment nginx-deploy
+
+# apply the deployment config by file
+# 'nginx-deploy.yaml' file name 
+kubectl apply -f nginx-deploy.yaml
+```
+
+- Pod's naming by kubernetes:
+	- name of replicaset (name of deployment + random-string) + random-string
+	- Ex. ((nginx-deploy)-12fr34tg24)-1e3f5
+
+## K8s configuation
+
+Each configuration has three parts:
+- metadata
+- specification
+- status (Etcd holds the current status of any K8s component)
+
+## Blueprints of configuration file
+Deployment manages pods.
+
+In deployment-config file, pods configurations are described in `template` section. Template section has it's own `metadata` and `spec`.
+
+## Connecting components
+
+`Labels` and `Selectors`, a `key` : `value` pair, connect the dot among the deployment, service and pod.
+
+Deployment metadata containers `labels` and Deployment and Service spec container `selector`.
+
+To connect Deployment with Pod, same `labels` are given to metadata.
+
+Selector matches the labels to connect the pod with deployment and service.
+
+## Abstraction layer
+
+- `Deployment` manages `Replicaset`
+
+- `Replicaset` manages `Pod`
+
+- `Pod` is an abstraction of `Container`
+
 
 ## References
 - [Kubernetes Tutorial for Beginners - TechWorld with Nana](https://www.youtube.com/watch?v=X48VuDVv0do&t=1087s)
