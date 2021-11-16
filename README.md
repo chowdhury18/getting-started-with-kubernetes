@@ -182,6 +182,66 @@ Selector matches the labels to connect the pod with deployment and service.
 
 - `Pod` is an abstraction of `Container`
 
+## Namespace
+- Organize resources in namespaces
+- Virtual cluster inside a cluster
+
+```sh
+# list namespaces
+kubectl get namespace
+```
+
+- 4 default namespaces:
+    - `kube-system`: System processes, Master and Kubectl processes
+    - `kube-public`: Publicly accessible data, Cluster information in `configmap` which can be accessed without authentication. Example: `kubectl cluster-info`
+    - `kibe-node-lease`: Determines the availability of a node
+    - `default`: Resources (pods) are created by default in default namespace is the namespace is not provided
+
+```sh
+# create namespace
+kubectl create namespace <name-of-namespace>
+
+# list components that are global for all namespaces
+kubectl api-resources --namespaced=false
+```
+
+- Why namespace:
+    - Group resources (Structure components)
+    - Avoid conflicts between teams
+    - Resource sharing: Staging and Development
+    - Resource sharing: Blue/Green Deployment
+    - Access and Resource Limits on Namespace level
+
+## Helm
+- Helm chart structure:
+```
+<chart-name>/
+    |- Chart.yaml
+    |- values.yaml
+    |- charts/
+    |- templates/
+```
+
+## Register local docker images for microk8s
+- Build docker image
+```sh
+docker build -t <image-name>:<image-version> .
+```
+
+- Save image as tar
+```sh
+docker save <image-name>:<image-version> -> <image-name>.tar
+```
+
+- Register/Import the image for microk8s
+```sh
+microk8s ctr image import <image-name>.tar
+```
+
+- List all registered images
+```sh
+microk8s ctr images ls
+```
 
 ## References
 - [Kubernetes Tutorial for Beginners - TechWorld with Nana](https://www.youtube.com/watch?v=X48VuDVv0do&t=1087s)
